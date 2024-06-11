@@ -23,6 +23,14 @@
     <mat-error>La description ne peut dépasser 100 caractères</mat-error>
   </mat-form-field>
 
+  <mat-form-field>
+    <mat-label>
+      Logo du Serveur
+    </mat-label>
+    <input formControlName="urlLogo" matInput placeholder="Ex. logo.jpg" />
+    <mat-error>Format invalide</mat-error>
+  </mat-form-field>
+
   <p><mat-slide-toggle formControlName="public">Public</mat-slide-toggle></p>
   <button mat-flat-button color="primary" type="submit">Ajouter le serveur</button>
 </form>

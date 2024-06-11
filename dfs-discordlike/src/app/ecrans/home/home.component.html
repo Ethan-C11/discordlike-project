@@ -1,19 +1,18 @@
 <main>
   <aside>
     <div class="liste-serveur">
-      <div class="serveur">
+      <div (click)="redirectCreationServeur()" class="serveur">
         <mat-icon fontIcon="add_circle"></mat-icon>
       </div>
-      <div class="serveur">
-        <img
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXZ6Vw-Br-RRvMstTlTqbeGXw4PNepXRrTzg&s"
-        />
-      </div>
-      <div class="serveur">
-        <img
-          src="https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/37/81/bf/3781bffd-882f-c02a-83ce-c6030b30b90a/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/1200x630wa.png"
-        />
-      </div>
+
+      @for(serveur of listeServeur; track serveur._id) {
+        <div class="serveur" title="{{serveur.nom}}" matTooltip="{{serveur.nom}}" matTooltipPosition="right">
+          <img
+            src="{{serveur.urlLogo}}"
+          />
+        </div>
+      }
+
     </div>
     <div class="info-profil">
       <img

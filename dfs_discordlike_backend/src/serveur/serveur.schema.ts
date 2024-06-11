@@ -13,6 +13,9 @@ export class Serveur {
 
   @Prop()
   public: boolean;
+
+  @Prop()
+  urlLogo : string;
 }
 
 export const ServeurSchema = SchemaFactory.createForClass(Serveur);
