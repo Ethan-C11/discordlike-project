@@ -1,0 +1,78 @@
+<form class="formulaire" [formGroup]="formulaire" (ngSubmit)="onInscription()">
+  <mat-form-field>
+    <mat-label>Nom</mat-label>
+    <input
+      matInput
+      type="text"
+      placeholder="John Doe"
+      formControlName="nom"
+    />
+
+    @if(formulaire.get("nom")?.hasError("required")) {
+      <mat-error>Le nom est obligatoire</mat-error>
+    } @else if(formulaire.get("nom")?.hasError("minlength")) {
+      <mat-error>Le nom doit faire au moins 3 caractères</mat-error>
+    } @else if(formulaire.get("nom")?.hasError("maxlength")) {
+      <mat-error>Le nom ne doit pas dépasser 20 caractères</mat-error>
+    }
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Email</mat-label>
+    <input
+      matInput
+      type="email"
+      placeholder="Ex. john.doe@domain.com"
+      formControlName="email"
+    />
+
+    @if(formulaire.get("email")?.hasError("required")) {
+    <mat-error>L'email' est obligatoire</mat-error>
+
+    } @else if (formulaire.get("email")?.hasError("email")) {
+    <mat-error>Le format de l'email est incorrect</mat-error>
+    }
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Mot de passe</mat-label>
+    <input
+      matInput
+      type="password"
+      formControlName="password"
+      (keyup)="verifierMotDePasseIdentique()"
+    />
+
+    @if(formulaire.get("password")?.hasError("required")) {
+    <mat-error>Le mot de passe est obligatoire</mat-error>
+    }
+  </mat-form-field>
+
+  <app-rule [texte]="formulaire.get('password')?.value" regex="[A-Z]">
+    Le mot de passe doit contenir une majuscule
+  </app-rule>
+
+  <app-rule [texte]="formulaire.get('password')?.value" regex="[a-z]">
+    Le mot de passe doit contenir une minuscule
+  </app-rule>
+
+  <app-rule [texte]="formulaire.get('password')?.value" regex="[0-9]">
+    Le mot de passe doit contenir un chiffre
+  </app-rule>
+
+  <mat-form-field>
+    <mat-label>Confirmer le mot de passe</mat-label>
+    <input
+      matInput
+      type="password"
+      formControlName="confirmationPassword"
+      (keyup)="verifierMotDePasseIdentique()"
+    />
+
+    <mat-error>Le mot de passe est obligatoire</mat-error>
+  </mat-form-field>
+
+  @if(!passwordIdentique) {
+  <mat-error>Les mots de passe ne sont pas identiques</mat-error>
+  }
+
+  <button type="submit" mat-flat-button color="primary">S'inscrire</button>
+</form>

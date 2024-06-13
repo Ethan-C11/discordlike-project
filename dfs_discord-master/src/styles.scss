@@ -1,0 +1,21 @@
+/* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.formulaire {
+  display: flex;
+  flex-direction: column;
+  min-width: 300px;
+  margin: 4em;
+
+  > *:not(:first-child) {
+    margin-top: 1em;
+  }
+}

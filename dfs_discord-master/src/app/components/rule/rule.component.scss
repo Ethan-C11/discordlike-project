@@ -1,0 +1,20 @@
+.rule {
+  display: flex;
+  align-items: center;
+
+  span {
+    margin-left: 0.5em;
+    font-style: italic;
+  }
+
+  mat-icon {
+    font-size: 2em;
+    width: 1em;
+    height: 1em;
+    color: rgb(185, 0, 0);
+  }
+
+  &.valid mat-icon {
+    color: rgb(3, 170, 3);
+  }
+}
