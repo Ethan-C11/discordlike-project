@@ -1,73 +1,106 @@
 @if (currentServer == undefined) {
-  <div class="message-selection">
-    <div class="message">
+  <div class="grid h-full w-full p-2 place-items-center">
+    <div class="text-4xl w-full font-bold text-center">
+      Bienvenue sur Accord (C'est pas Discord)
+    </div>
+    <div class="text-2xl w-full text-center">
       Veuillez sélectionner un serveur
     </div>
   </div>
 } @else {
-  @if (currentSalon == undefined) {
-    <div class="affichage-nom-serveur"> Serveur actuel :
-      <div class="nom-serveur"> {{ currentServer.nom }}</div>
-      <div class="bouton">
-        <form class="form-creation" [formGroup]="formulaireSalon">
-          <mat-form-field>
-            <mat-label>Nom</mat-label>
-            <input matInput type="text" placeholder="Nom" formControlName="nom" class="input-form">
+  <div class="flex w-full h-full ">
+    <div class="bg-purple-900/45 w-fit min-w-[270px] overflow-y-auto">
+      <div class="">
+        <div class="text-center text-white text-2xl font-bold"> {{ currentServer.nom }}</div>
+        <div class="align-center">
+          <form class="p-2 flex flex-col" [formGroup]="formulaireSalon">
+            <mat-form-field class="rounded w-60 text-sm">
+              <mat-label>Nom du nouveau salon</mat-label>
+              <input matInput type="text" placeholder="Nom" formControlName="nom">
+            </mat-form-field>
+            <button class="bg-black hover:bg-gray-700 text-white font-bold text-center h-6 w-60 rounded justify-center"
+                    matTooltip="Créer un nouveau salon"
+                    matTooltipPosition="right" (click)="handleCreationSalon()">
+              +
+            </button>
+          </form>
+
+        </div>
+      </div>
+
+      <div class="p-2 ">
+        <div class="text-center font-bold border-t">
+          Liste des salons
+        </div>
+        @for (salon of listeSalon; track salon._id) {
+          <div class="border-b border-gray-500/60 cursor-pointer hover:bg-gray-300/15"
+               (click)="handleSelectionSalon(salon)">
+            <div class="text-gray-200"
+                 [ngClass]="{'bg-gray-300/20': salon._id === currentSalon?._id}"> {{ salon.nom }}
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+    @if (currentSalon != undefined) {
+      <div class="flex flex-col justify-between w-full">
+        <div class="grid auto-rows-max p-4 overflow-auto">
+          @if (listeMessage?.length == 0) {
+            <div> Aucun message par ici</div>
+          }
+          @for (message of listeMessage; track message._id) {
+            <div class="flex px-4 mb-2 border-b border-gray-600/50">
+              <img
+                class="rounded-full w-12 h-12 object-cover mr-4"
+                src="{{message.urlAvatar}}"
+              />
+              <div class="flex flex-col flex-1">
+                <div class="text-gray-300">{{ message.userName }}</div>
+                <p class="contenu">
+                  {{
+                    message.message
+                  }}
+                </p>
+              </div>
+            </div>
+          }
+        </div>
+        <form class="flex flex-row bottom-0 p-2 px-auto w-full justify-center" [formGroup]="formulaireMessage">
+          <mat-form-field class="h-24 w-5/6 px-2 resize-none">
+        <textarea matInput maxlength="2000" type="text" class="resize-none" rows="2"
+                  formControlName="message" placeholder="Envoyer un message..."> </textarea>
           </mat-form-field>
-          <mat-form-field>
-            <mat-label> Description</mat-label>
-            <input matInput type="text" placeholder="Description" formControlName="description" class="input-form">
-          </mat-form-field>
-          <button class="bouton-salons" (click)="handleCreationSalon()">
-            Créer un nouveau salon
+          <button class="bg-purple-600 rounded h-20 w-20 hover:bg-purple-500" (click)="handleEnvoiMessage()"> Envoyer
           </button>
         </form>
-
       </div>
-    </div>
-    <div class="liste-salons">
-      @for (salon of listeSalon; track salon._id) {
-        <div class="salon" (click)="handleSelectionSalon(salon)">
-          <div class="nom"> {{ salon.nom }}</div>
-          <p class="description">
-            {{ salon.description }}
-          </p>
+    } @else {
+      <div class="grid h-full w-full p-2 place-items-center">
+        <div class="text-4xl w-full font-bold text-center">
+          Bienvenue sur le serveur {{ currentServer.nom }}
+        </div>
+        <div class="text-2xl w-full text-center">
+          Veuillez sélectionner un salon pour commencer à discuter
+        </div>
+      </div>
+    }
+    <div class="bg-purple-900/45 min-w-48 w-2/12">
+      @for(utilisateur of listeUserServer; track utilisateur._id) {
+        <div class="flex flex-row p-2 text-nowrap  overflow-hidden items-center hover:bg-gray-300/15 border-b border-gray-500/20">
+          <img
+            class="rounded-full w-8 h-8 object-cover mr-2"
+            src="{{utilisateur.urlAvatar}}"
+          />
+          <div class="flex flex-col flex-1">
+            <div class="text-gray-300 text-left text-ellipsis"> {{ utilisateur.nom }}</div>
+          </div>
         </div>
       }
     </div>
-  } @else {
-    <button class="bouton-salons" (click)="handleSelectionSalon(undefined)">
-      Retour à la liste des salons
-    </button>
-    <div class="liste-message">
 
-      @if(listeMessage?.length == 0) {
-        <div> Aucun message par ici </div>
-      }
-      @for (message of listeMessage; track message._id) {
-      <div class="message">
-        <img
-          class="avatar"
-          src="https://play-lh.googleusercontent.com/0goocG7RJZDZ41ShfBPl-h7ctwHKHjqzn4nSImyL8_RWyXqeYNKw-CdGAKhgPGZG5Es"
-        />
-        <div class="partie-message">
-          <div class="utilisateur">{{message.userName}}</div>
-          <p class="contenu">
-            {{
-              message.message
-            }}
-          </p>
-        </div>
-      </div>
-      }
-    </div>
-    <form class="message-form" [formGroup]="formulaireMessage">
-      <mat-form-field class="message-sender">
-        <textarea matInput maxlength="2000" type="text" class="envoi-message" rows="5" formControlName="message"> </textarea>
-      </mat-form-field>
-      <button class="message-button" (click)="handleEnvoiMessage()"> Envoyer </button>
-    </form>
-  }
+  </div>
 
 }
+
+
 

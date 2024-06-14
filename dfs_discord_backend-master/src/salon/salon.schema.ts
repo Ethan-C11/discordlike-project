@@ -8,9 +8,6 @@ export class Salon {
   @Prop({ required: true, minlength: 3, maxlength: 50 })
   nom: string;
 
-  @Prop({ maxlength: 100 })
-  description: string;
-
   @Prop({ required: true, maxlength: 100 })
   serveurId: string;
 }

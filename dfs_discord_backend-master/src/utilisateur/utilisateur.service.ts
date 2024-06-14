@@ -59,4 +59,9 @@ export class UtilisateurService {
 
     return utilisateur;
   }
+
+  async findByToken(email: any): Promise<Utilisateur> {
+    const utilisateur = await this.utilisateurModel.findOne({ email: email });
+    return utilisateur;
+  }
 }

@@ -4,4 +4,5 @@ export declare type Message = {
   salonId: string;
   userId: string;
   userName: string;
+  urlAvatar: string;
 };

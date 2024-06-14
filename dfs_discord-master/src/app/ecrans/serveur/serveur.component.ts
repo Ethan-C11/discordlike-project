@@ -14,6 +14,8 @@ import {
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Message } from '../../models/message.type';
 import { Utilisateur } from '../../models/utilisateur.type';
+import { MatTooltip } from '@angular/material/tooltip';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-serveur',
@@ -24,6 +26,8 @@ import { Utilisateur } from '../../models/utilisateur.type';
     MatFormField,
     ReactiveFormsModule,
     MatLabel,
+    MatTooltip,
+    NgClass,
   ],
   templateUrl: './serveur.component.html',
   styleUrl: './serveur.component.scss',
@@ -83,7 +87,6 @@ export class ServeurComponent {
   handleCreationSalon() {
     const body: any = {
       nom: this.formulaireSalon.value.nom,
-      description: this.formulaireSalon.value.description,
       serveurId: this.currentServer?._id,
     };
 
@@ -98,6 +101,7 @@ export class ServeurComponent {
               duration: 3000,
             });
             this.ngOnInit();
+            this.formulaireSalon.reset();
           });
       }
     }
@@ -122,7 +126,10 @@ export class ServeurComponent {
             let user = this.listeUserServer?.filter((user) => {
               return user._id == message.userId;
             })[0];
-            if (user != undefined) message.userName = user.nom;
+            if (user != undefined) {
+              message.userName = user.nom;
+              message.urlAvatar = user.urlAvatar;
+            }
           });
           this.listeMessage = listeMessage;
         });

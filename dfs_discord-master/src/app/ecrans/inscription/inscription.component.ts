@@ -46,6 +46,7 @@ export class InscriptionComponent {
       ],
     ],
     confirmationPassword: ['', [Validators.required]],
+    urlAvatar: [''],
   });
 
   passwordIdentique: boolean = true;
@@ -60,6 +61,9 @@ export class InscriptionComponent {
 
   onInscription() {
     if (this.formulaire.valid && this.passwordIdentique) {
+      this.formulaire.value.urlAvatar =
+        'https://api.dicebear.com/8.x/thumbs/svg?seed=' +
+        this.formulaire.value.nom;
       this.http
         .post('http://localhost:3000/inscription', this.formulaire.value)
         .subscribe((utilisateur) => {

@@ -59,6 +59,13 @@ export class UtilisateurController {
     );
   }
 
+  @Get('user/by-token')
+  @UseGuards(AuthGuard)
+  async getUserByToken(@Request() requete) {
+    const email = requete.user.sub;
+    return this.utilisateurService.findByToken(email);
+  }
+
   @Get('user/:id')
   @UseGuards(AuthGuard)
   findById(@Param('id') id: string) {

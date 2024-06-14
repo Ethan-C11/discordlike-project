@@ -75,6 +75,10 @@ export class EditionServeurComponent {
 
   onAjoutServeur() {
     if (this.formulaire.valid) {
+      if (this.formulaire.value.urlLogo == '')
+        this.formulaire.value.urlLogo =
+          'https://api.dicebear.com/8.x/initials/svg?seed=' +
+          this.formulaire.value.nom;
       this.http
         .post('http://localhost:3000/serveur', this.formulaire.value)
         .subscribe((nouveauServeur) => {
@@ -83,7 +87,11 @@ export class EditionServeurComponent {
           this.snackBar.open('Le serveur a bien été ajouté', undefined, {
             duration: 3000,
           });
-
+          const body = {
+            nom: 'Général',
+            serveurId: serveur._id,
+          };
+          this.http.post('http://localhost:3000/salon', body).subscribe();
           this.router.navigateByUrl('/principal');
         });
     }
