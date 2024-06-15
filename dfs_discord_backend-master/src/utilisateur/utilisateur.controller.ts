@@ -40,6 +40,7 @@ export class UtilisateurController {
 
     const payload = {
       sub: utilisateur.email,
+      subId: utilisateur._id,
     };
 
     return await this.jwtService.signAsync(payload);
@@ -51,10 +52,10 @@ export class UtilisateurController {
     @Body() serveurArejoindreDto: any,
     @Request() requete,
   ) {
-    const email = requete.user.sub;
+    const id = requete.user.subId;
 
     return this.utilisateurService.rejoindreServeur(
-      email,
+      id,
       serveurArejoindreDto._id,
     );
   }
@@ -62,8 +63,8 @@ export class UtilisateurController {
   @Get('user/by-token')
   @UseGuards(AuthGuard)
   async getUserByToken(@Request() requete) {
-    const email = requete.user.sub;
-    return this.utilisateurService.findByToken(email);
+    const id = requete.user.subId;
+    return this.utilisateurService.findByToken(id);
   }
 
   @Get('user/:id')

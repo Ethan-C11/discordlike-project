@@ -35,10 +35,15 @@ import { NgClass } from '@angular/common';
 export class ServeurComponent {
   @Input()
   currentServer: Serveur | undefined;
+
+  @Input()
+  currentUser: Utilisateur | undefined;
+
   currentSalon: Salon | undefined;
   listeSalon: Salon[] | undefined;
   listeMessage: Message[] | undefined;
   listeUserServer: Utilisateur[] | undefined;
+  listeUserBanni: Utilisateur[] | undefined;
   router: Router = inject(Router);
   http: HttpClient = inject(HttpClient);
   formBuilder: FormBuilder = inject(FormBuilder);
@@ -79,6 +84,13 @@ export class ServeurComponent {
         .subscribe(
           (listeUtilisateur) => (this.listeUserServer = listeUtilisateur),
         );
+      this.http
+        .get<
+          Utilisateur[]
+        >('http://localhost:3000/serveur/banni/' + this.currentServer._id)
+        .subscribe(
+          (listeUtilisateur) => (this.listeUserBanni = listeUtilisateur),
+        );
       this.currentSalon = undefined;
       this.listeMessage = undefined;
     }
@@ -90,7 +102,6 @@ export class ServeurComponent {
       serveurId: this.currentServer?._id,
     };
 
-    console.log(body);
     if (this.currentServer != undefined) {
       if (this.formulaireSalon.valid) {
         console.log(body);
@@ -152,5 +163,39 @@ export class ServeurComponent {
           this.handleFetchMessage();
         });
     }
+  }
+
+  bannirUtilisateur(id: string) {
+    const body = {
+      server: this.currentServer?._id,
+      target: id,
+    };
+    this.http
+      .post('http://localhost:3000/serveur/ban', body)
+      .subscribe((nouveauSalon) => {
+        this.snackBar.open("L'utilisateur a été banni", undefined, {
+          duration: 2000,
+        });
+        const curSalonTemp = this.currentSalon;
+        this.handleServerSelection();
+        this.handleSelectionSalon(curSalonTemp);
+      });
+  }
+
+  debannirUtilisateur(id: string) {
+    const body = {
+      server: this.currentServer?._id,
+      target: id,
+    };
+    this.http
+      .post('http://localhost:3000/serveur/deban', body)
+      .subscribe((nouveauSalon) => {
+        this.snackBar.open("L'utilisateur a été debanni", undefined, {
+          duration: 2000,
+        });
+        const curSalonTemp = this.currentSalon;
+        this.handleServerSelection();
+        this.handleSelectionSalon(curSalonTemp);
+      });
   }
 }

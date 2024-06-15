@@ -16,6 +16,7 @@ import { Serveur } from '../../models/serveur.type';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
+import { Utilisateur } from '../../models/utilisateur.type';
 
 @Component({
   selector: 'app-edition-serveur',
@@ -42,6 +43,7 @@ export class EditionServeurComponent {
   http: HttpClient = inject(HttpClient);
   router: Router = inject(Router);
   snackBar: MatSnackBar = inject(MatSnackBar);
+  currentUser: Utilisateur | undefined;
 
   dataSource: any;
 
@@ -52,13 +54,19 @@ export class EditionServeurComponent {
 
     if (jwt) {
       this.http
-        .get<Serveur[]>('http://localhost:3000/serveur')
-        .subscribe((listeServeur) => {
-          this.dataSource = new MatTableDataSource(listeServeur);
+        .get<Utilisateur>('http://localhost:3000/user/by-token')
+        .subscribe((user) => {
+          this.http
+            .get<
+              Serveur[]
+            >('http://localhost:3000/serveur/not-banned/' + user._id)
+            .subscribe((listeServeur) => {
+              this.dataSource = new MatTableDataSource(listeServeur);
 
-          if (this.sort) {
-            this.dataSource.sort = this.sort;
-          }
+              if (this.sort) {
+                this.dataSource.sort = this.sort;
+              }
+            });
         });
     }
   }
@@ -75,10 +83,6 @@ export class EditionServeurComponent {
 
   onAjoutServeur() {
     if (this.formulaire.valid) {
-      if (this.formulaire.value.urlLogo == '')
-        this.formulaire.value.urlLogo =
-          'https://api.dicebear.com/8.x/initials/svg?seed=' +
-          this.formulaire.value.nom;
       this.http
         .post('http://localhost:3000/serveur', this.formulaire.value)
         .subscribe((nouveauServeur) => {
