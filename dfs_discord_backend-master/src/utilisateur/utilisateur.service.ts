@@ -74,4 +74,19 @@ export class UtilisateurService {
     const utilisateur = await this.utilisateurModel.findOne({ _id: id });
     return utilisateur;
   }
+
+  async update(modifUser: Utilisateur, userId: string) {
+    const utilisateur = await this.utilisateurModel.findOneAndUpdate(
+      { _id: userId },
+      {
+        $set: {
+          nom: modifUser.nom,
+          email: modifUser.email,
+          urlAvatar: modifUser.urlAvatar,
+        },
+      },
+      { new: true }, // Retourner le document mis à jour
+    );
+    return utilisateur;
+  }
 }

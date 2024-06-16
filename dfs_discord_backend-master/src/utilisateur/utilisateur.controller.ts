@@ -30,6 +30,13 @@ export class UtilisateurController {
     return this.utilisateurService.create(createUtilisateurDto);
   }
 
+  @Post('user/modification')
+  @UseGuards(AuthGuard)
+  modifUser(@Request() requete, @Body() modifUserDto) {
+    const userId = requete.user.subId;
+    return this.utilisateurService.update(modifUserDto, userId);
+  }
+
   @Post('login')
   async create(@Body() utilisateurDto: any) {
     const utilisateur =

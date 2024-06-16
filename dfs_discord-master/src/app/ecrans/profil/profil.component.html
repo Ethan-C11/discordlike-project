@@ -1,1 +1,80 @@
-<p>profil works!</p>
+<div class="flex flex-row h-full w-full">
+  <aside class="flex flex-col p-2 bg-purple-950/50 w-fit justify-between items-center h-full">
+    <div class="flex flex-col w-12 gap-2 items-center">
+      <img
+        class="invert h-8 w-8 object-center cursor-pointer"
+        src="https://static-00.iconduck.com/assets.00/return-icon-2048x1866-c8h3yn0w.png"
+        routerLink="/profil"
+        matTooltip="Retour au menu principal"
+        matTooltipPosition="right"
+        (click)="retourMenuPrincipal()"
+      />
+    </div>
+    <div class="flex mb-2 bottom-0 w-fit">
+      <img
+        class="invert h-8 w-8 object-center cursor-pointer"
+        src="https://i.imgur.com/k52wk0D.png"
+        routerLink="/profil"
+        matTooltip="Se déconnecter"
+        matTooltipPosition="right"
+        (click)="deconnexion()"
+
+      />
+    </div>
+  </aside>
+
+  <div class="flex flex-col w-full">
+  <div class="flex flex-row h-fit">
+    <img src="{{currentUser?.urlAvatar}}" class="h-32 w-32 rounded-full m-4 border-gray-500 border">
+    <div class="flex flex-col justify-center">
+      <div class="text-2xl"> {{ currentUser?.nom }}</div>
+      <div class="text-gray-500"> {{ currentUser?.email }}</div>
+    </div>
+  </div>
+  <div class="bg-purple-950/50 w-full text-center h-fit"> Modifier votre profil </div>
+    <form [formGroup]="formulaire" class="flex flex-col p-8">
+      <mat-form-field>
+        <mat-label>
+          Nom
+        </mat-label>
+        <input matInput type="text" placeholder="John Doe" formControlName="nom"
+               [value]="currentUser?.nom"/>
+        @if(formulaire.get("nom")?.hasError("required")) {
+          <mat-error>Le nom est obligatoire</mat-error>
+
+        } @else if (formulaire.get("nom")?.hasError("minlength")) {
+          <mat-error>Le nom doit avoir 3 caractères minimum</mat-error>
+
+        } @else if (formulaire.get("nom")?.hasError("maxlength")) {
+          <mat-error>Le nom doit avoir 50 caractères maximum</mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>
+          E-Mail
+        </mat-label>
+        <input matInput type="text" placeholder="john.doe@gmail.com" formControlName="email"
+               [value]="currentUser?.email" />
+        @if(formulaire.get("email")?.hasError("required")) {
+          <mat-error>L'email' est obligatoire</mat-error>
+
+        } @else if (formulaire.get("email")?.hasError("email")) {
+          <mat-error>Le format de l'email est incorrect</mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>
+          URL de l'Avatar
+        </mat-label>
+        <input matInput type="text" placeholder="url-avatar.png" formControlName="urlAvatar"
+               [value]="currentUser?.urlAvatar"/>
+        <mat-error>L'url de l'avatar est obligatoire</mat-error>
+
+      </mat-form-field>
+      <div class="flex flex-row w-full gap-2">
+        <button class="w-full bg-purple-900 rounded cursor-pointer hover:bg-purple-700 p-2" (click)="editUser()"> Valider les modifications </button>
+        <button class="w-full bg-gray-500 rounded cursor-pointer hover:bg-gray-400 p-2" (click)="resetForm()"> Réinitialiser les champs </button>
+      </div>
+    </form>
+  </div>
+</div>
