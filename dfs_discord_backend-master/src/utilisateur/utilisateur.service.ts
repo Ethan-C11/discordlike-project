@@ -33,6 +33,18 @@ export class UtilisateurService {
     const hash = await bcrypt.hash(createdUtilisateur.password, saltOrRounds);
     createdUtilisateur.password = hash;
 
+    const listeUtilisateurEmailIndentique: Utilisateur[] =
+      await this.utilisateurModel
+        .find({
+          email: createdUtilisateurDto.email,
+        })
+        .exec();
+    if (listeUtilisateurEmailIndentique.length != 0) {
+      throw new HttpException('Accès Refusé', 403, {
+        cause: "L'email est déjà pris",
+      });
+    }
+
     return createdUtilisateur.save();
   }
 

@@ -25,8 +25,6 @@ export class UtilisateurController {
 
   @Post('inscription')
   async inscription(@Body() createUtilisateurDto: any) {
-    //TODO : vérifier les donnée (regles mot de passe, email unique ...)
-
     return this.utilisateurService.create(createUtilisateurDto);
   }
 
