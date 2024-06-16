@@ -19,7 +19,7 @@ export class Utilisateur {
   urlAvatar: string;
 
   @Prop()
-  serveurs: Serveur[];
+  serveurs: string[];
 
   _id: string;
 }

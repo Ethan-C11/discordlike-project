@@ -17,13 +17,14 @@ export class MessageController {
   @UseGuards(AuthGuard)
   @Post()
   async create(@Body() createMessageDto: any, @Request() requete) {
-    const email = requete.user.sub;
-    return this.messageService.create(createMessageDto, email);
+    const id = requete.user.subId;
+    return this.messageService.create(createMessageDto, id);
   }
 
   @UseGuards(AuthGuard)
   @Get(':salon')
-  findAll(@Param('salon') salonId: string) {
-    return this.messageService.findAllOfSalon(salonId);
+  findAll(@Param('salon') salonId: string, @Request() requete) {
+    const userId = requete.user.subId;
+    return this.messageService.findAllOfSalon(salonId, userId);
   }
 }

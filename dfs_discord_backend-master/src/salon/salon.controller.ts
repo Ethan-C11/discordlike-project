@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, UseGuards, Param } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  Param,
+  Request,
+} from '@nestjs/common';
 import { SalonService } from './salon.service';
 import { AuthGuard } from 'src/auth.guard';
 
@@ -8,14 +16,17 @@ export class SalonController {
 
   @UseGuards(AuthGuard)
   @Get(':id')
-  findAll(@Param('id') id: string) {
-    console.log(id);
+  findAll(@Param('id') id: string, @Request() requete) {
+    const userId = requete.user.subId;
 
-    return this.salonService.findAllOfServer(id);
+    return this.salonService.findAllOfServer(id, userId);
   }
 
   @Post()
-  async create(@Body() createSalonDto: any) {
-    return this.salonService.create(createSalonDto);
+  @UseGuards(AuthGuard)
+  async create(@Body() createSalonDto: any, @Request() requete) {
+    const userId = requete.user.subId;
+
+    return this.salonService.create(createSalonDto, userId);
   }
 }
